@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b16d004124ec49aba4fa1ea943873c7a" Name="Diagram1">
+        <EntityTypeShape EntityType="AdhesionCoeffModel.adhesion_rules" Width="1.5" PointX="2.125" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="AdhesionCoeffModel.loco_adhesion_coeff" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="AdhesionCoeffModel.loco_type" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AdhesionCoeffModel.sysdiagrams" Width="1.5" PointX="5" PointY="3.25" IsExpanded="true" />
+        <AssociationConnector Association="AdhesionCoeffModel.FK_loco_adhesion_coeff_loco_type" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

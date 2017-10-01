@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AdhesionCoeffModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="adhesion_rules">
+    <Key>
+      <PropertyRef Name="id_rule" />
+    </Key>
+    <Property Name="id_rule" Type="Decimal" Precision="8" Scale="0" Nullable="false" />
+    <Property Name="rule" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="precent_of_value" Type="Double" Nullable="false" />
+    <Property Name="percent_sign" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="loco_adhesion_coeff">
+    <Key>
+      <PropertyRef Name="id_loco" />
+    </Key>
+    <Property Name="id_loco" Type="Decimal" Precision="8" Scale="0" Nullable="false" />
+    <Property Name="loco_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="id_loco_type" Type="Decimal" Precision="8" Scale="0" />
+    <Property Name="adh_initial_coeff" Type="Double" Nullable="false" />
+    <NavigationProperty Name="loco_type" Relationship="Self.FK_loco_adhesion_coeff_loco_type" FromRole="loco_adhesion_coeff" ToRole="loco_type" />
+  </EntityType>
+  <EntityType Name="loco_type">
+    <Key>
+      <PropertyRef Name="id_type" />
+    </Key>
+    <Property Name="id_type" Type="Decimal" Precision="8" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="type" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="loco_adhesion_coeff" Relationship="Self.FK_loco_adhesion_coeff_loco_type" FromRole="loco_type" ToRole="loco_adhesion_coeff" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_loco_adhesion_coeff_loco_type">
+    <End Role="loco_type" Type="Self.loco_type" Multiplicity="0..1" />
+    <End Role="loco_adhesion_coeff" Type="Self.loco_adhesion_coeff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="loco_type">
+        <PropertyRef Name="id_type" />
+      </Principal>
+      <Dependent Role="loco_adhesion_coeff">
+        <PropertyRef Name="id_loco_type" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="AdhesionCoeffEntities4" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="adhesion_rules" EntityType="Self.adhesion_rules" />
+    <EntitySet Name="loco_adhesion_coeff" EntityType="Self.loco_adhesion_coeff" />
+    <EntitySet Name="loco_type" EntityType="Self.loco_type" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <AssociationSet Name="FK_loco_adhesion_coeff_loco_type" Association="Self.FK_loco_adhesion_coeff_loco_type">
+      <End Role="loco_type" EntitySet="loco_type" />
+      <End Role="loco_adhesion_coeff" EntitySet="loco_adhesion_coeff" />
+    </AssociationSet>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(AdhesionCoeffModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(AdhesionCoeffModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+  </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+</Schema>

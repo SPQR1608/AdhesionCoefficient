@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AdhesionCoeffModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="adhesion_rules">
+    <Key>
+      <PropertyRef Name="id_rule" />
+    </Key>
+    <Property Name="id_rule" Type="decimal" Precision="8" Scale="0" Nullable="false" />
+    <Property Name="rule" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="precent_of_value" Type="float" Nullable="false" />
+    <Property Name="percent_sign" Type="varchar" MaxLength="2" Nullable="false" />
+  </EntityType>
+  <EntityType Name="loco_adhesion_coeff">
+    <Key>
+      <PropertyRef Name="id_loco" />
+    </Key>
+    <Property Name="id_loco" Type="decimal" Precision="8" Scale="0" Nullable="false" />
+    <Property Name="loco_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="id_loco_type" Type="decimal" Precision="8" Scale="0" />
+    <Property Name="adh_initial_coeff" Type="float" Nullable="false" />
+  </EntityType>
+  <EntityType Name="loco_type">
+    <Key>
+      <PropertyRef Name="id_type" />
+    </Key>
+    <Property Name="id_type" Type="decimal" Precision="8" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="type" Type="nvarchar" MaxLength="70" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_loco_adhesion_coeff_loco_type">
+    <End Role="loco_type" Type="Self.loco_type" Multiplicity="0..1" />
+    <End Role="loco_adhesion_coeff" Type="Self.loco_adhesion_coeff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="loco_type">
+        <PropertyRef Name="id_type" />
+      </Principal>
+      <Dependent Role="loco_adhesion_coeff">
+        <PropertyRef Name="id_loco_type" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="AdhesionCoeffModelStoreContainer">
+    <EntitySet Name="adhesion_rules" EntityType="Self.adhesion_rules" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="loco_adhesion_coeff" EntityType="Self.loco_adhesion_coeff" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="loco_type" EntityType="Self.loco_type" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_loco_adhesion_coeff_loco_type" Association="Self.FK_loco_adhesion_coeff_loco_type">
+      <End Role="loco_type" EntitySet="loco_type" />
+      <End Role="loco_adhesion_coeff" EntitySet="loco_adhesion_coeff" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

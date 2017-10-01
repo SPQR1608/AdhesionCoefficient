@@ -1,0 +1,2 @@
+
+metadata=res://*/Model1.csdl|res://*/Model1.ssdl|res://*/Model1.msl;provider=MySql.Data.MySqlClient;provider connection string="server=127.0.0.1;user id=root;database=AdhesionCoeff;port=3306"
